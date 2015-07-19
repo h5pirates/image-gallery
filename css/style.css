@@ -1,0 +1,57 @@
+body {
+    font-family: "Microsoft Yahei";
+}
+
+.container {
+    margin: 0 auto;
+    min-width: 960px;
+}
+
+.column {
+    padding-bottom: 10000px;
+    margin-bottom: -10000px;
+    overflow: hidden;
+}
+
+.sidebar {
+    float: left;
+    margin-left: -100%;
+    width: 200px;
+    background-color: #263859;
+}
+
+.sidebar p {
+    color: #FFFFFF;
+}
+
+.logo {
+    margin: 0;
+}
+
+.new-album-btn {
+    margin: 50px auto;
+    width: 100px;
+    height: 30px;
+    border-radius: 4px;
+    background-color: #F64B4B;
+    text-align: center;
+}
+
+.logo-wrapper {
+    background-color: #272A40;
+    text-align: center;
+}
+
+.nav ul {
+    list-style:none;
+}
+
+.main-wrapper {
+    float: left;
+    width: 100%;
+    background-color: #EAEAEA;
+}
+
+.main-wrapper > .main {
+    margin-left: 200px;
+}
