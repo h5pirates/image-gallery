@@ -1,17 +1,27 @@
-<!DOCTYPE html>
 <html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="css/style.css">
-  <title></title>
+<head>
+<title>Hello Image</title>
+<link rel="stylesheet" href="css/flexbox.css" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="header">
-  </div>
+<div class="wrapper">
+  <header>
+  </header>
+  <nav>
+  </nav>
   <div class="container">
     <div class="main-wrapper column">
       <div class="main">
-        照片区
+        <span class='photos'> 照片区 </span>
+        <section id='album_1' class='album_1'>
+        </section>
+        <section id='album_2' class='album_2'>
+          <p>Hello Section 2</p>
+        </section>
+        <section id='album_3' class='album_3'>
+          <p>Hello Section 3</p>
+        </section>
       </div>
     </div>
     <div class="sidebar column">
@@ -26,25 +36,118 @@
         <div class="nav">
           <ul>
             <li>
-              <div>
-                <p>相册1</p>
+            <div class='album album_1'>
+                <p>相册1 <span class="photo-number">(200)</span></p>
               </div>
             </li>
             <li>
-              <div>
-                <p>相册2</p>
+            <div class='album album_2'>
+                <p>相册2 <span class="photo-number">(115)</span></p>
               </div>
             </li>
             <li>
-              <div>
-                <p>相册3</p>
+            <div class='album album_3'>
+                <p>相册3 <span class="photo-number">(190)</span></p>
               </div>
             </li>
           </ul>
         </div>
+        <div class="new-photo-btn-wrapper">
+          <div class="new-photo-btn">
+            <input type="file" id="fileInput" value="上传图片">
+            <div id='preview'>
+            </div>
+            <button id='upload'>Upload
+            </button>
+          </div>
+        </div>
     </div>
   </div>
-  <div class="footer">
-  </div>
+  <footer>
+  </footer>
+</div>
 </body>
-</html>
+
+<script src="vendor/jquery.min.js"></script>
+<script type="text/javascript">
+function insertImg(data){
+  var imgsrc = data.url;
+  var poer = data.poer;
+  //var imgsrc = 'www.baidu.com';
+  //var poer = 'andyhelix';
+  var tmpl = "<article><div class='image'><img src='"+imgsrc+"'</div><div class='feature'><span class='poer'>"+poer+"</span>&nbsp;<span class='posttime'>2015-07-20</span></div></article>";
+  //console.log(tmpl);
+  var section = $('section#album_1');
+  section.append(tmpl);
+}
+
+function saveToLocal(testName, testObject){
+  //var testObject = {'url': null, 'poer': 'andyhelix', 'group': 'dog'};
+  localStorage.setItem(testName, JSON.stringify(testObject));
+}
+$.getJSON("fake.json", function(data)
+    {
+    //console.log(typeof(data));
+    //console.log(data);
+    saveToLocal(data[0].group, data)
+    
+    var getObject = localStorage.getItem('imageData');
+    console.log('getObject', getObject);
+    console.log(getObject==data);
+
+    for (item in data)
+    {
+    insertImg(data[item]);
+    }
+    });
+// $().offset().top
+// $().positive().top
+$('.album').click(function(){
+    var className = $(this).attr('class');
+    var getSectionClassId = className.split(' ')[1];
+    var section = $('section#'+getSectionClassId);
+    $('section').hide();
+    section.show();
+    })
+
+
+var fileInput = document.getElementById('fileInput');
+var fileDisplayArea = document.getElementById('preview');
+
+fileInput.addEventListener('change', function(e) {
+  // Put the rest of the demo code here.
+  var file = fileInput.files[0];
+  var imageType = /image.*/;
+
+  if (file.type.match(imageType)) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      fileDisplayArea.innerHTML = "";
+
+      // Create a new image.
+      var img = new Image();
+      img.style.height = '100px';            
+      // Set the img src property using the data URL.
+      img.src = reader.result;
+      // save to localStorage
+      testObject = {'url': reader.result, 'poer': 'andyhelix', 'group': 'dog'};
+
+      // Add the image to the page.
+      fileDisplayArea.appendChild(img);
+    }
+
+    reader.readAsDataURL(file); 
+  } else {
+    fileDisplayArea.innerHTML = "File not supported!";
+  }
+});
+
+var getObject = localStorage.getItem('dogpic');
+console.log('getObject', JSON.parse(getObject));
+
+$('#upload').click(function() {
+    saveToLocal('dogpic', testObject);
+    })
+</script>
+</html> 

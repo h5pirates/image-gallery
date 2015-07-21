@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>js多文件上传测试</title>
+</head>
+<body>
+<p>文件上传到本地指定文件夹 /image/year/mouth/filename</p>
+<p>附加信息: 相册名 图片名 描述信息 上传日期 (upvote downvote 分享数 发布者)</p>
+&lt;p&gt;Daily &amp;amp; Monthly Specials.&lt;/p&gt;
+<code>&lt;p&gt;Daily &amp;amp; Monthly Specials.&lt;/p&gt;</code>
+
+<p>信息存储方式 LocalStorage JSON</p>
+<pre>
+{
+  'id': 1,
+  'url': http://&lt;host&gt;/image/...,
+  'decsription': "...",
+  'group': '人物',
+  'image': '汤唯',
+  'uploaddate': '2015-07-15',
+  'editdate': '2015-07-18',
+  'upvote': 258,
+  'downvote': 45,
+  'sharetimes': 300,
+  'poer': 'andyhelix',
+}
+</pre>
+<hr>
+<input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
+<a href="#" id="fileSelect">Select some files</a> 
+<div id="fileList">
+    <p>No files selected!</p>
+</div>
+<hr>
+<input type="file" id="files" name="files[]" multiple>
+<div id='show_image'>
+</div>
+<div id='list'>
+</div>
+
+<hr><p>Save image to local</p>
+<input type="file" accept="image/*" class="js-image-upload"/>
+ <div class="js-image-container"></div>
+
+<!-- javascript -->
+
+<script src="vendor/jquery.min.js"></script>
+
+<script type="text/javascript" src="js/localsave.js"></script>
+<script type="text/javascript" src="js/html5file.js"></script>
+<script src="js/upload.js"></script>
+<hr>
+<input type="file" id="readfiles" name="files[]" multiple>
+<button id="readFile">Read File</button>
+<output id="content"></output>
+     
+<script>
+     
+function readFile() 
+{
+    /* Get the reference of the inpout element. */
+    var files = document.getElementById('readfiles').files;
+ 
+    if (!files.length) 
+    {
+      alert('Please select a file!');
+      return;
+    }
+     
+    /* Reading the first file selected. You can process other files similarly in loop. */
+    var file = files[0];
+ 
+    /* Instantiate the File Reader object. */
+    var reader = new FileReader();
+ 
+    /* onLoad event is fired when the load completes. */
+    reader.onload = function(event) {
+        document.getElementById('content').textContent = event.target.result;      
+    };
+ 
+    /* The readAsText method will read the file's data as a text string. By default the string is decoded as 'UTF-8'. */
+    reader.readAsText(file);
+}
+      
+document.getElementById('readFile').addEventListener('click', function(event) {
+      readFile();    
+  }, false);
+</script>
+<hr>
+<input type='file' id="imgInp" />
+<img id="blah" src="#" alt="your image" />
+<script>
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $("#imgInp").change(function(){
+        readURL(this);
+});
+</script>
+<hr>
+<script type="text/javascript" src='js/indexdbtest.js'></script>
+<p>Show elephant in indexdb</p>
+<img id="elephant" src="" alt="" />
+<hr>
+<div id="page-wrapper">
+
+  <h1>Image File Reader</h1>
+  <div>
+    Select an image file: 
+    <input type="file" id="fileInput">
+  </div>
+  <div id="fileDisplayArea"></div>
+
+</div>
+<script>
+window.onload = function(){
+  var fileInput = document.getElementById('fileInput');
+  var fileDisplayArea = document.getElementById('fileDisplayArea');
+
+  function saveToLocal(testName, testObject){
+    //var testObject = {'url': null, 'poer': 'andyhelix', 'group': 'dog'};
+    localStorage.setItem(testName, JSON.stringify(testObject));
+  }
+
+  fileInput.addEventListener('change', function(e) {
+    // Put the rest of the demo code here.
+    var file = fileInput.files[0];
+    var imageType = /image.*/;
+
+    if (file.type.match(imageType)) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        fileDisplayArea.innerHTML = "";
+
+        // Create a new image.
+        var img = new Image();
+        img.style.height = '100px';            
+        // Set the img src property using the data URL.
+        img.src = reader.result;
+        // save to localStorage
+        var testObject = {'url': reader.result, 'poer': 'andyhelix', 'group': 'dog'};
+        //saveToLocal('dogpic', testObject);
+
+        // Add the image to the page.
+        fileDisplayArea.appendChild(img);
+      }
+
+      reader.readAsDataURL(file); 
+    } else {
+      fileDisplayArea.innerHTML = "File not supported!";
+    }
+  });
+
+  var getObject = localStorage.getItem('dogpic');
+  console.log('getObject', JSON.parse(getObject));
+}
+</script>
+</body>
+</html>
